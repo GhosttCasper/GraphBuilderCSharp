@@ -51,9 +51,9 @@ namespace GraphBuilderCSharp
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "C:\\Users\\voval\\Desktop\\1.txt";// "c:\\";
+                openFileDialog.InitialDirectory = "C:\\Users\\";// "c:\\";\\voval\\Desktop\\1.txt
                 openFileDialog.Filter = @"Text files(*.txt)|*.txt|DIMACS files(*.clq)|*.clq|All files(*.*)|*.*";
-                openFileDialog.FilterIndex = 3;
+                openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
