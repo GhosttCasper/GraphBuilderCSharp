@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphBuilderCSharp
 {
@@ -16,12 +11,22 @@ namespace GraphBuilderCSharp
         private Vertex IncidentFrom { get; } // выходит(начало) 
         private Vertex IncidentTo { get; }   // входит (конец)
         private int Weight { get; }        // Вес
+        private int SecondWeight { get; }        // Вес
 
         public Edge(Vertex incidentFrom, Vertex incidentTo, int weight)
         {
             IncidentFrom = incidentFrom;
             IncidentTo = incidentTo;
             Weight = weight;
+            SecondWeight = int.MaxValue;
+        }
+
+        public Edge(Vertex incidentFrom, Vertex incidentTo, int weight, int secondWeight)
+        {
+            IncidentFrom = incidentFrom;
+            IncidentTo = incidentTo;
+            Weight = weight;
+            SecondWeight = secondWeight;
         }
 
         public void Draw(Graphics graphics)
@@ -61,7 +66,14 @@ namespace GraphBuilderCSharp
             Font drawFont = new Font("Arial", 12);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             PointF drawPoint = new PointF((float)centerX, (float)centerY);
-            graphics.DrawString(Weight.ToString(), drawFont, drawBrush, drawPoint);
+
+            if (SecondWeight != int.MaxValue)
+            {
+                string str = Weight.ToString() + "/" + SecondWeight.ToString();
+                graphics.DrawString(str, drawFont, drawBrush, drawPoint);
+            }
+            else
+                graphics.DrawString(Weight.ToString(), drawFont, drawBrush, drawPoint);
         }
     }
 }

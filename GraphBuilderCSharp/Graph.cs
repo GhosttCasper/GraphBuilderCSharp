@@ -27,6 +27,14 @@ namespace GraphBuilderCSharp
             vertexFrom.AdjacencyList.Add(curEdge);
         }
 
+        public void SetValue(int incidentFromIndex, int incidentToIndex, int weight, int secondWeight)
+        {
+            Vertex vertexFrom = data[incidentFromIndex - 1];
+            Vertex vertexTo = data[incidentToIndex - 1];
+            Edge curEdge = new Edge(vertexFrom, vertexTo, weight, secondWeight);
+            vertexFrom.AdjacencyList.Add(curEdge);
+        }
+
         public List<Vertex> GetVertices()
         {
             return data;

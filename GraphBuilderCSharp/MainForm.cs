@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,22 +49,36 @@ namespace GraphBuilderCSharp
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             var filePath = string.Empty;
+            var fileContent = string.Empty;
+            bool isOk = false;
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "C:\\Users\\";// "c:\\";\\voval\\Desktop\\1.txt
+                openFileDialog.InitialDirectory = "C:\\Users\\";// "c:\\";\\voval\\Desktop\\1.txt // "C:\\Users\\voval\\YandexDisk\\Visual Studio 2017 Projects\\
                 openFileDialog.Filter = @"Text files(*.txt)|*.txt|DIMACS files(*.clq)|*.clq|All files(*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    filePath = openFileDialog.FileName;   //Get the path of specified file
+                {
+                    filePath = openFileDialog.FileName; //Get the path of specified file
+
+                    var fileStream = openFileDialog.OpenFile();//Read the contents of the file into a stream
+
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        isOk = Manager.ValidateGraphFile(filePath, FileFormat.TXT, reader);
+                    }
+                }
                 else
                     return;
             }
 
-            Manager.LoadTxtFormatGraph(filePath);
-            Redraw();
+            if (isOk)
+            {
+                Manager.LoadTxtFormatGraph(filePath);
+                Redraw();
+            }
         }
 
         private int GetMouseX()
@@ -81,6 +96,12 @@ namespace GraphBuilderCSharp
             if (MovingVertex == null)
                 return;
 
+            UpdateMovingVertex();
+            Redraw();
+        }
+
+        private void UpdateMovingVertex()
+        {
             MovingVertex.X = GetMouseX() - DifferenceX;
             MovingVertex.Y = GetMouseY() - DifferenceY;
 
@@ -99,7 +120,7 @@ namespace GraphBuilderCSharp
             Redraw();
         }
 
-        private void GraphFieldPanel_MouseDown(object sender, MouseEventArgs e)
+       private void GraphFieldPanel_MouseDown(object sender, MouseEventArgs e)
         {
             int mouseX = GetMouseX();
             int mouseY = GetMouseY();
